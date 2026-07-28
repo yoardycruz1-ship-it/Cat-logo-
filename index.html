@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JESSY FRAGANCIA - Catálogo</title>
+    
+    <!-- ENLACES PWA Y MANIFEST AÑADIDOS -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#090909">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <style>
+        /* RESETEO Y PANTALLA COMPLETA */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #090909; color: #fff; width: 100%; min-height: 100vh; padding-bottom: 30px; }
+        
+        /* ESTILO MODERNO FUCSIA */
+        :root {
+            --fucsia: #ff007f;
+            --fucsia-oscuro: #b30059;
+            --fondo-tarjeta: #161616;
+            --borde: #2a2a2a;
+        }
+
+        /* ENCABEZADO FIJO Y BUSCADOR */
+        .header-catalogo {
+            background: rgba(9, 9, 9, 0.95);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--borde);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .header-top h1 {
+            font-size: 22px;
+            color: var(--fucsia);
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+        
+        /* BOTÓN PANTALLA COMPLETA */
+        .btn-fullscreen {
+            background: var(--fucsia);
+            border: none;
+            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            font-size: 20px;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.4);
+            transition: transform 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-fullscreen:active {
+            transform: scale(0.90);
+        }
+
+        .buscador-moderno {
+            width: 100%;
+            padding: 14px 18px;
+            background: #000;
+            border: 1px solid var(--borde);
+            border-radius: 30px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        .buscador-moderno:focus {
+            outline: none;
+            border-color: var(--fucsia);
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+        }
+
+        /* CUADRÍCULA PANTALLA COMPLETA */
+        .catalogo-grid {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* TARJETA MODERNA */
+        .perfume-card { 
+            background: var(--fondo-tarjeta); 
+            border-radius: 20px; 
+            overflow: hidden; 
+            border: 1px solid var(--borde); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* IMAGEN COMPLETA */
+        .imagen-wrapper { 
+            position: relative; 
+            width: 100%; 
+            height: 380px; 
+            background: #000; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+        .foto-perfume { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
+        
+        /* MARCA DE AGUA AUTOMÁTICA */
+        .logo-marca-agua { 
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+            width: 55px; 
+            height: 55px; 
+            border-radius: 50%; 
+            border: 2px solid var(--fucsia); 
+            background: rgba(0,0,0,0.7); 
+            object-fit: cover; 
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        /* CONTROLES Y CASILLAS */
+        .controles-datos {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .grupo-input {
+            position: relative;
+        }
+        .casilla-texto {
+            width: 100%;
+            padding: 14px 14px 14px 40px;
+            background: #0a0a0a;
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .casilla-texto:focus {
+            outline: none;
+            border-color: var(--fucsia);
+            background: #111;
+        }
+        .icono-input {
+            position: absolute;
+            left: 14px;
+            top: 15px;
+            font-size: 16px;
+        }
+
+        .casilla-estado {
+            width: 100%;
+            padding: 14px;
+            background: #0a0a0a;
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            appearance: none;
+            text-align: center;
+        }
+        .casilla-estado:focus {
+            outline: none;
+            border-color: var(--fucsia);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABECERA FIJA Y BUSCADOR -->
+    <div class="header-catalogo">
+        <div class="header-top">
+            <h1>JESSY FRAGANCIA</h1>
+            <!-- Botón de Pantalla Completa -->
+            <button class="btn-fullscreen" onclick="activarPantallaCompleta()" title="Pantalla Completa">🔲</button>
+        </div>
+        <input type="text" id="inputBuscador" class="buscador-moderno" placeholder="🔍 Buscar por nombre o marca..." onkeyup="filtrarCatalogo()">
+    </div>
+
+    <!-- CONTENEDOR DE TARJETAS -->
+    <div id="contenedorCatalogo" class="catalogo-grid"></div>
+
+    <script>
+        const contenedor = document.getElementById('contenedorCatalogo');
+        // Límite ampliado a 3000 para que metas todas las que querrás sin fallos
+        const maxImagenesSoportadas = 3000; 
+
+        // 1. FUNCION DE PANTALLA COMPLETA
+        function activarPantallaCompleta() {
+            let elemento = document.documentElement;
+            if (!document.fullscreenElement) {
+                if (elemento.requestFullscreen) {
+                    elemento.requestFullscreen();
+                } else if (elemento.webkitRequestFullscreen) { /* Safari / iOS */
+                    elemento.webkitRequestFullscreen();
+                } else if (elemento.msRequestFullscreen) { /* IE11 */
+                    elemento.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        }
+
+        // 2. BUSCAR IMÁGENES Y CREAR TARJETAS (Optimizado para no pegar el celular)
+        for(let i = 1; i <= maxImagenesSoportadas; i++) {
+            let imgPrueba = new Image();
+            imgPrueba.src = i + '.jpg';
+
+            // SOLO si la imagen existe, crea la tarjeta. Así no te llena el celular de basura.
+            imgPrueba.onload = function() {
+                let nombreGuardado = localStorage.getItem('perfume_' + i + '_nombre') || '';
+                let marcaGuardada = localStorage.getItem('perfume_' + i + '_marca') || '';
+                let estadoGuardado = localStorage.getItem('perfume_' + i + '_estado') || 'Disponible';
+                let colorEstado = estadoGuardado === 'Disponible' ? '#00ff88' : '#ff3366';
+
+                let tarjeta = document.createElement('div');
+                tarjeta.className = 'perfume-card';
+                tarjeta.id = 'tarjeta_' + i;
+                
+                // Mágia de orden: Aunque la imagen 100 cargue antes que la 1, siempre se ordenarán bien
+                tarjeta.style.order = i; 
+
+                tarjeta.innerHTML = `
+                    <div class="imagen-wrapper">
+                        <img src="${i}.jpg" class="foto-perfume">
+                        <img src="logo.png" alt="Marca" class="logo-marca-agua">
+                    </div>
+                    
+                    <div class="controles-datos">
+                        <div class="grupo-input">
+                            <span class="icono-input">🏷️</span>
+                            <input type="text" id="nombre_${i}" class="casilla-texto" placeholder="Nombre del perfume..." 
+                                   value="${nombreGuardado}" 
+                                   oninput="autoguardar(${i}, 'nombre', this.value); filtrarCatalogo();">
+                        </div>
+                        
+                        <div class="grupo-input">
+                            <span class="icono-input">👑</span>
+                            <input type="text" id="marca_${i}" class="casilla-texto" placeholder="Marca (Ej. Dior, etc)..." 
+                                   value="${marcaGuardada}" 
+                                   oninput="autoguardar(${i}, 'marca', this.value); filtrarCatalogo();">
+                        </div>
+                        
+                        <select id="estado_${i}" class="casilla-estado" style="color: ${colorEstado};" 
+                                onchange="autoguardar(${i}, 'estado', this.value)">
+                            <option value="Disponible" ${estadoGuardado === 'Disponible' ? 'selected' : ''}>✅ Disponible</option>
+                            <option value="No Disponible" ${estadoGuardado === 'No Disponible' ? 'selected' : ''}>❌ Agotado</option>
+                        </select>
+                    </div>
+                `;
+                contenedor.appendChild(tarjeta);
+            };
+        }
+
+        // 3. AUTOGUARDADO EN MEMORIA
+        function autoguardar(id, tipo, valor) {
+            localStorage.setItem('perfume_' + id + '_' + tipo, valor);
+            if (tipo === 'estado') {
+                let selectElem = document.getElementById('estado_' + id);
+                selectElem.style.color = valor === 'Disponible' ? '#00ff88' : '#ff3366';
+            }
+        }
+
+        // 4. BUSCADOR EN TIEMPO REAL
+        function filtrarCatalogo() {
+            let texto = document.getElementById('inputBuscador').value.toLowerCase();
+            let tarjetas = document.querySelectorAll('.perfume-card');
+            
+            tarjetas.forEach(tarjeta => {
+                let id = tarjeta.id.split('_')[1];
+                let nombre = document.getElementById('nombre_' + id).value.toLowerCase();
+                let marca = document.getElementById('marca_' + id).value.toLowerCase();
+                
+                if (nombre.includes(texto) || marca.includes(texto)) {
+                    tarjeta.style.display = 'flex';
+                } else {
+                    tarjeta.style.display = 'none';
+                }
+            });
+        }
+
+        // 5. REGISTRO DEL SERVICE WORKER (Para que no se cierre el acceso directo)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registrado con éxito');
+                })
+                .catch(err => {
+                    console.log('Fallo el registro del ServiceWorker: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
